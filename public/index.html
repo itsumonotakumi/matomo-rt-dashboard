@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matomo リアルタイムダッシュボード</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Matomo リアルタイムダッシュボード</h1>
+            <div class="header-right">
+                <span id="current-time" class="current-time">--:--:--</span>
+                <a href="../admin/index.php" class="admin-link">設定</a>
+            </div>
+        </header>
+
+        <!-- アラート表示エリア -->
+        <div id="alert-container"></div>
+
+        <!-- 数値カード -->
+        <div class="cards">
+            <div class="card">
+                <div class="card-title">直近30分 アクティブ訪問</div>
+                <div class="card-value" id="active-30-value">-</div>
+                <div class="card-subtitle" id="active-30-updated">読込中...</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">今日の総訪問数</div>
+                <div class="card-value" id="today-total-value">-</div>
+                <div class="card-subtitle" id="hourly-updated">読込中...</div>
+            </div>
+        </div>
+
+        <!-- グラフエリア -->
+        <div class="chart-container">
+            <h2>直近30分 アクティブ訪問数（サイト別）</h2>
+            <canvas id="active-chart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2>今日の時間帯別訪問数（0〜23時）</h2>
+            <canvas id="hourly-chart"></canvas>
+        </div>
+
+        <footer>
+            <p>Matomo RT Dashboard v1.0 |
+                <a href="../api/health.php" target="_blank">ヘルスチェック</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>

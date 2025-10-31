@@ -1,0 +1,26 @@
+# ルート .htaccess
+
+# ディレクトリインデックスを無効化
+Options -Indexes
+
+# デフォルトドキュメント
+DirectoryIndex index.html index.php
+
+# セキュリティ: センシティブファイルへのアクセスを拒否
+<FilesMatch "^(\\.env|\\.git.*|composer\\.(json|lock)|package(-lock)?\\.json|.*\\.md)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# PHPエラー表示を無効化（本番環境）
+<IfModule mod_php5.c>
+    php_flag display_errors off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag display_errors off
+</IfModule>

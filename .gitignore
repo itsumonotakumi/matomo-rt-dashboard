@@ -1,0 +1,45 @@
+# センシティブなデータ（GitHubにプッシュしない）
+.env
+storage/settings.json
+storage/*.log
+storage/error.log
+storage/.login_attempts
+storage/.health_test
+
+# キャッシュ
+storage/cache/*.json
+storage/cache/*
+
+# IDEとエディタ
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+desktop.ini
+
+# 一時ファイル
+*.tmp
+*.bak
+*.old
+
+# ログファイル
+*.log
+logs/
+
+# テスト結果
+test-results/
+coverage/
+
+# 依存関係（今回は使わないが念のため）
+vendor/
+node_modules/
+composer.lock
+package-lock.json
+
+# その他
+.phpunit.result.cache
