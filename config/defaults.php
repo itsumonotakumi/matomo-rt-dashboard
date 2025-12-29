@@ -7,6 +7,9 @@
  */
 
 return [
+    // デバッグモード（本番環境では必ずfalseにすること）
+    'DEBUG_MODE' => false,
+
     // Matomo接続情報
     'MATOMO_URL' => '',
     'TOKEN_AUTH' => '',

@@ -74,6 +74,11 @@ if (file_exists($envPath)) {
         }
     }
 
+    // ブール型に変換
+    if (isset($env['DEBUG_MODE'])) {
+        $env['DEBUG_MODE'] = filter_var($env['DEBUG_MODE'], FILTER_VALIDATE_BOOLEAN);
+    }
+
     $envConfig = $env;
 }
 

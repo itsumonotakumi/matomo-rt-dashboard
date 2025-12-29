@@ -5,12 +5,20 @@
  * 全APIエンドポイントで最初にrequireされるファイル
  */
 
-// エラーレポート設定（本番環境では非表示）
-error_reporting(E_ALL);
-ini_set('display_errors', '0');
-
 // 設定を読み込み
 $config = require __DIR__ . '/../config/config.php';
+
+// デバッグモード判定
+$debugMode = $config['DEBUG_MODE'] ?? false;
+
+// エラーレポート設定
+error_reporting(E_ALL);
+if ($debugMode) {
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+} else {
+    ini_set('display_errors', '0');
+}
 
 // ヘルパー関数
 
@@ -23,6 +31,7 @@ function logError(string $message, array $context = []): void
 
     $logFile = $config['ERROR_LOG_FILE'];
     $maxSize = $config['ERROR_LOG_MAX_SIZE'];
+    $debugMode = $config['DEBUG_MODE'] ?? false;
 
     // ログファイルサイズチェック（1MB超でtruncate）
     if (file_exists($logFile) && filesize($logFile) > $maxSize) {
@@ -30,10 +39,23 @@ function logError(string $message, array $context = []): void
     }
 
     $timestamp = date('Y-m-d H:i:s');
-    $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE) : '';
-    $logMessage = "[{$timestamp}] {$message} {$contextStr}\n";
+    $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : '';
+
+    // デバッグモードの場合、スタックトレースも記録
+    $trace = '';
+    if ($debugMode) {
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+        $trace = "\nStack trace:\n" . print_r($backtrace, true);
+    }
+
+    $logMessage = "[{$timestamp}] {$message} {$contextStr}{$trace}\n";
 
     file_put_contents($logFile, $logMessage, FILE_APPEND | LOCK_EX);
+
+    // デバッグモードの場合、標準エラー出力にも出力
+    if ($debugMode) {
+        error_log("[DEBUG] {$message} {$contextStr}");
+    }
 }
 
 /**
